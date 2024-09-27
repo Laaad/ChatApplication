@@ -1,16 +1,20 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatServer {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(2000);
         System.out.println("Server started. Waiting for clients...");
+        List<ClientHandler> clients = new ArrayList<>();
 
         while (true){
-            
             Socket clientSocket = serverSocket.accept();
+            ClientHandler clientHandler = new ClientHandler(clientSocket, clients );
+            clients.add(clientHandler);
             System.out.println("Client connected." + clientSocket);
+            new Thread(clientHandler).start();
         }
         }
 }
